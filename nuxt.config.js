@@ -1,4 +1,10 @@
 module.exports = {
+  /*
+   ** GET google key from .env
+   */
+  env: {
+    VUE_APP_GOOGLE_MAPS_API_KEY: process.env.VUE_APP_GOOGLE_MAPS_API_KEY
+  },
   mode: "universal",
   /*
    ** Headers of the page
@@ -27,7 +33,7 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ["@/plugins/google-maps"],
   /*
    ** Nuxt.js dev-modules
    */
@@ -38,7 +44,8 @@ module.exports = {
   modules: [
     // Doc: https://github.com/nuxt-community/modules/tree/master/packages/bulma
     "@nuxtjs/bulma",
-    "bootstrap-vue/nuxt"
+    "bootstrap-vue/nuxt",
+    "@nuxtjs/dotenv"
   ],
   /*
    ** Build configuration

@@ -12,6 +12,7 @@ import { setContext, getLocation, getRouteData, normalizeError } from './utils'
 /* Plugins */
 
 import nuxt_plugin_bootstrapvue_2d85dbae from 'nuxt_plugin_bootstrapvue_2d85dbae' // Source: ./bootstrap-vue.js (mode: 'all')
+import nuxt_plugin_googlemaps_c54ce192 from 'nuxt_plugin_googlemaps_c54ce192' // Source: ../plugins/google-maps (mode: 'all')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -143,6 +144,10 @@ async function createApp(ssrContext) {
 
   if (typeof nuxt_plugin_bootstrapvue_2d85dbae === 'function') {
     await nuxt_plugin_bootstrapvue_2d85dbae(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_googlemaps_c54ce192 === 'function') {
+    await nuxt_plugin_googlemaps_c54ce192(app.context, inject)
   }
 
   // If server-side, wait for async component to be resolved first
