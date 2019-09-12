@@ -1,24 +1,24 @@
 <template>
   <div>
     <Nav />
-    <!--
-    User Data Goes Here
-    -->
+    <UserData />
   </div>
 </template>
 
 <script>
-  import axios from 'axios'
-  import Nav from '~/components/Nav.vue'
+import axios from "axios";
+import Nav from "~/components/Nav.vue";
 
-  export default {
-    components: {
-      Nav
-    },
+// User Data component
+import UserData from "~/components/UserData.vue";
 
+export default {
+  components: {
+    Nav,
+    UserData
   }
+};
 </script>
 
 <style scoped>
-
 </style>
