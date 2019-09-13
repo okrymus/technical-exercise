@@ -1,14 +1,14 @@
 <template>
   <div class="content">
-    <b-container fluid>
-      <b-card>
+    <div b-container fluid>
+      <b-card :dark="dark">
         <!-- User Interface controls -->
         <template v-slot:header>
-          <b-container fluid>
+          <b-container bv-example-row-flex-cols>
             <b-row>
               <b-col lg="6" class="my-1">
                 <b-form-group
-                  label="Filter"
+                  label="Filter/Search"
                   label-cols-sm="3"
                   label-align-sm="right"
                   label-size="sm"
@@ -39,18 +39,20 @@
                   class="mb-0"
                 >
                   <b-form-checkbox-group v-model="filterOn">
-                    <b-form-checkbox style="font-size:13px" value="name">Name</b-form-checkbox>
-                    <b-form-checkbox style="font-size:13px" value="email">Email</b-form-checkbox>
-                    <b-form-checkbox style="font-size:13px" value="phone">Phone</b-form-checkbox>
+                    <b-form-checkbox style="font-size:12px" value="username">Username</b-form-checkbox>
+                    <b-form-checkbox style="font-size:12px" value="name">Name</b-form-checkbox>
+                    <b-form-checkbox style="font-size:12px" value="email">Email</b-form-checkbox>
+                    <b-form-checkbox style="font-size:12px" value="company">Company&nbsp;</b-form-checkbox>
+                    <b-form-checkbox style="font-size:12px" value="phone">Phone</b-form-checkbox>
                   </b-form-checkbox-group>
                 </b-form-group>
               </b-col>
             </b-row>
             <b-row>
-              <b-col lg="6" class="my-1">
+              <b-col lg="6" class="my-1" align-self="end">
                 <b-form-group
                   label="Per page"
-                  label-cols-sm="3"
+                  label-cols-sm="10"
                   label-align-sm="right"
                   label-size="sm"
                   label-for="perPageSelect"
@@ -64,123 +66,102 @@
                   ></b-form-select>
                 </b-form-group>
               </b-col>
-              <b-col />
             </b-row>
           </b-container>
         </template>
+
         <!-- Main table element -->
         <b-card-body>
           <b-card-title>User Information</b-card-title>
-          <b-card-text>
-            <b-table
-              show-empty
-              small
-              :items="items"
-              :fields="fields"
-              :current-page="currentPage"
-              :per-page="perPage"
-              :filter="filter"
-              :filterIncludedFields="filterOn"
-              :sort-by.sync="sortBy"
-              :sort-desc.sync="sortDesc"
-              :sort-direction="sortDirection"
-              @filtered="onFiltered"
-              responsive
-              class="table"
-            >
-              <!-- <template v-slot:cell(name)="row">{{ row.value.name }}</template> -->
-
-              <template v-slot:cell(show_details)="row">
-                <b-button
-                  size="sm"
-                  style="font-size:10px"
-                  @click="row.toggleDetails"
-                >{{ row.detailsShowing ? 'Hide' : 'Show' }} Details</b-button>
-              </template>
-
-              <template v-slot:cell(email)="row">
-                <a :href="`mailto:${row.item['email']}`">{{row.item['email']}}</a>
-              </template>
-              <template v-slot:cell(website)="row">
-                <a :href="`http://${row.item['website']}`" target="_blank">{{row.item['website']}}</a>
-              </template>
-
-              <template v-slot:row-details="row">
-                <b-card>
-                  <div v-for="(value, key) in row.item" :key="key">
-                    <div v-if="key==='address'  || key==='address' ">
-                      <b-row class="mb-2">
-                        <b-col sm="3" class="text-sm-right">
-                          <b>{{key}}:</b>
-                        </b-col>
-                        <ul>
-                          <div v-for="(value, key) in value" :key="key">
-                            <li>{{key}}: {{value}}</li>
-                          </div>
-                          <gmap-map :center="center" :map-type-id="mapTypeId" :zoom="5"></gmap-map>
-                        </ul>
-                      </b-row>
-                    </div>
-                    <div v-else-if="key==='company' ">
-                      <b-row class="mb-2">
-                        <b-col sm="3" class="text-sm-right">
-                          <b>{{key}}:</b>
-                        </b-col>
-                        <ul>
-                          <div v-for="(value, key) in value" :key="key">
-                            <li>{{key}}: {{value}}</li>
-                          </div>
-                        </ul>
-                      </b-row>
-                    </div>
-
-                    <div v-else-if="key!=='_showDetails'">
-                      <b-row class="mb-2">
-                        <b-col sm="3" class="text-sm-right">
-                          <b>{{key}}:</b>
-                        </b-col>
-                        <b-col>{{ value }}</b-col>
-                      </b-row>
-                    </div>
-                  </div>
-                </b-card>
-              </template>
-            </b-table>
-          </b-card-text>
-          <b-pagination
-            v-model="currentPage"
-            :total-rows="totalRows"
+          <b-table
+            :busy="isBusy"
+            show-empty
+            small
+            striped
+            :stacked="stacked"
+            :items="items"
+            :fields="fields"
+            :current-page="currentPage"
             :per-page="perPage"
-            align="center"
-            size="sm"
-            first-text="First"
-            prev-text="Prev"
-            next-text="Next"
-            last-text="Last"
-          ></b-pagination>
+            :filter="filter"
+            :filterIncludedFields="filterOn"
+            @filtered="onFiltered"
+            responsive
+            class="table"
+          >
+            <template v-slot:table-busy>
+              <div class="text-center text-danger my-2">
+                <b-spinner class="align-middle"></b-spinner>
+                <strong>Loading...</strong>
+              </div>
+            </template>
+            <template v-slot:cell(show_details)="row">
+              <b-button
+                size="sm"
+                style="font-size:10px"
+                @click="row.toggleDetails"
+              >{{ row.detailsShowing ? 'Hide' : 'Show' }} Details</b-button>
+            </template>
+            <template v-slot:cell(company)="row"></template>
+            <template v-slot:cell(email)="row">
+              <a :href="`mailto:${row.item['email']}`">{{row.item['email']}}</a>
+            </template>
+            <template v-slot:cell(website)="row">
+              <a :href="`http://${row.item['website']}`" target="_blank">{{row.item['website']}}</a>
+            </template>
+
+            <!-- to see more user information -->
+            <template v-slot:row-details="row">
+              <component
+                v-bind:is="component"
+                v-bind:row="row.item"
+                v-bind:rowtoggleDetails="row.toggleDetails"
+              ></component>
+            </template>
+          </b-table>
         </b-card-body>
+        <b-pagination
+          style="  padding: 15px 32px;   font-size: 2px;
+
+"
+          v-model="currentPage"
+          :total-rows="totalRows"
+          :per-page="perPage"
+          align="center"
+          size="sm"
+          first-text="First"
+          prev-text="Prev"
+          next-text="Next"
+          last-text="Last"
+        ></b-pagination>
       </b-card>
-    </b-container>
+    </div>
   </div>
 </template>
 
-
 <script>
 import axios from "axios";
+import userCard from "~/components/cards/UserCard.vue";
+
 export default {
+  components: { userCard },
   data() {
     return {
       //
-      //  EXPORT  FOR GOOGLE MAP
-      //
-      center: {},
-      mapTypeId: "roadmap",
-      markers: [],
-      //
       // Table export
       //
+      stacked: false,
+      dark: false,
+      isBusy: true,
+      component: "userCard",
       items: [],
       fields: [
+        {
+          key: "username",
+          label: "username",
+          sortable: true,
+          sortDirection: "desc"
+        },
         {
           key: "name",
           label: "Full name",
@@ -192,6 +173,13 @@ export default {
           label: "Email",
           sortable: true,
           class: "text-left"
+        },
+        {
+          key: "company",
+          label: "Company",
+          class: "text-left",
+          thClass: "d-none",
+          tdClass: "d-none"
         },
         {
           key: "phone",
@@ -211,9 +199,6 @@ export default {
       currentPage: 1,
       perPage: 5,
       pageOptions: [5, 10, 15],
-      sortBy: "",
-      sortDesc: false,
-      sortDirection: "asc",
       filter: null,
       filterOn: [],
       infoModal: {
@@ -240,16 +225,31 @@ export default {
   mounted() {
     // Set the initial number of items
     this.totalRows = this.items.length;
+
+    // on resize window's width, allows to stack the table
+    window.onresize = () => {
+      if (window.innerWidth < 800) {
+        this.stacked = true;
+      } else {
+        this.stacked = false;
+      }
+    };
   },
+
   methods: {
     getUser() {
+      // get user's data from web
       axios
         .get("https://jsonplaceholder.typicode.com/users")
         .then(resp => {
           this.items = resp.data;
           this.totalRows = this.items.length;
+          this.isBusy = false;
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+          this.isBusy = false;
+          console.log(error);
+        });
     },
     info(item, index, button) {
       this.infoModal.title = `Row index: ${index}`;
@@ -275,12 +275,6 @@ export default {
   margin-left: 5%;
   margin-top: 10px;
   font-size: 10px;
-}
-
-.vue-map-container {
-  height: 200px;
-  max-width: 992px;
-  width: 100%;
 }
 
 .table {

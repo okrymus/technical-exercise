@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <!-- <img src="~/assets/nav-logo.png" /> -->
+      <img src="~/assets/nav-logo.png" style="margin: auto; width: 80%;" />
     </div>
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-start">
