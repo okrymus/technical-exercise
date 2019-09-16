@@ -1,78 +1,76 @@
 <template>
   <div class="content">
+    <!-- User Interface controls -->
     <div b-container fluid>
-      <b-card :dark="dark">
-        <!-- User Interface controls -->
+      <b-card>
         <template v-slot:header>
-          <b-container bv-example-row-flex-cols>
-            <b-row>
-              <b-col lg="6" class="my-1">
-                <b-form-group
-                  label="Filter/Search"
-                  label-cols-sm="3"
-                  label-align-sm="right"
-                  label-size="sm"
-                  label-for="filterInput"
-                  class="mb-0"
-                >
-                  <b-input-group size="sm">
-                    <b-form-input
-                      v-model="filter"
-                      type="search"
-                      id="filterInput"
-                      placeholder="Type to Search"
-                    ></b-form-input>
-                    <b-input-group-append>
-                      <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
-                    </b-input-group-append>
-                  </b-input-group>
-                </b-form-group>
-              </b-col>
+          <b-row>
+            <b-col lg="6" class="my-1">
+              <b-form-group
+                label="Filter/Search"
+                label-cols-sm="3"
+                label-align-sm="right"
+                label-size="sm"
+                label-for="filterInput"
+                class="mb-0"
+              >
+                <b-input-group size="sm">
+                  <b-form-input
+                    v-model="filter"
+                    type="search"
+                    id="filterInput"
+                    placeholder="Type to Search"
+                  ></b-form-input>
+                  <b-input-group-append>
+                    <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+                  </b-input-group-append>
+                </b-input-group>
+              </b-form-group>
+            </b-col>
 
-              <b-col lg="6" class="my-1">
-                <b-form-group
-                  label="Filter On"
-                  label-cols-sm="3"
-                  label-align-sm="right"
-                  label-size="sm"
-                  description="Leave all unchecked to filter on all data"
-                  class="mb-0"
-                >
-                  <b-form-checkbox-group v-model="filterOn">
-                    <b-form-checkbox style="font-size:12px" value="username">Username</b-form-checkbox>
-                    <b-form-checkbox style="font-size:12px" value="name">Name</b-form-checkbox>
-                    <b-form-checkbox style="font-size:12px" value="email">Email</b-form-checkbox>
-                    <b-form-checkbox style="font-size:12px" value="company">Company&nbsp;</b-form-checkbox>
-                    <b-form-checkbox style="font-size:12px" value="phone">Phone</b-form-checkbox>
-                  </b-form-checkbox-group>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col lg="6" class="my-1" align-self="end">
-                <b-form-group
-                  label="Per page"
-                  label-cols-sm="10"
-                  label-align-sm="right"
-                  label-size="sm"
-                  label-for="perPageSelect"
-                  class="mb-0"
-                >
-                  <b-form-select
-                    v-model="perPage"
-                    id="perPageSelect"
-                    size="sm"
-                    :options="pageOptions"
-                  ></b-form-select>
-                </b-form-group>
-              </b-col>
-            </b-row>
-          </b-container>
+            <b-col lg="6" class="my-1">
+              <b-form-group
+                label="Filter On"
+                label-cols-sm="3"
+                label-align-sm="right"
+                label-size="sm"
+                description="Leave all unchecked to filter on all data"
+                class="mb-0"
+              >
+                <b-form-checkbox-group v-model="filterOn">
+                  <b-form-checkbox style="font-size:12px" value="username">Username</b-form-checkbox>
+                  <b-form-checkbox style="font-size:12px" value="name">Name</b-form-checkbox>
+                  <b-form-checkbox style="font-size:12px" value="email">Email</b-form-checkbox>
+                  <b-form-checkbox style="font-size:12px" value="company">Company&nbsp;</b-form-checkbox>
+                  <b-form-checkbox style="font-size:12px" value="phone">Phone</b-form-checkbox>
+                </b-form-checkbox-group>
+              </b-form-group>
+            </b-col>
+          </b-row>
+
+          <b-row>
+            <b-col lg="9" class="my-1" align-self="end">
+              <b-form-group
+                label="Per page"
+                label-cols-sm="10"
+                label-align-sm="right"
+                label-size="sm"
+                label-for="perPageSelect"
+                class="mb-0"
+              >
+                <b-form-select
+                  v-model="perPage"
+                  id="perPageSelect"
+                  size="sm"
+                  :options="pageOptions"
+                ></b-form-select>
+              </b-form-group>
+            </b-col>
+          </b-row>
         </template>
-
         <!-- Main table element -->
         <b-card-body>
-          <b-card-title>User Information</b-card-title>
+          <b-card-title>User Data from Spill Center 2019</b-card-title>
           <b-table
             :busy="isBusy"
             show-empty
@@ -121,9 +119,7 @@
           </b-table>
         </b-card-body>
         <b-pagination
-          style="  padding: 15px 32px;   font-size: 2px;
-
-"
+          style="  padding: 15px 32px;   font-size: 2px;"
           v-model="currentPage"
           :total-rows="totalRows"
           :per-page="perPage"
@@ -234,6 +230,12 @@ export default {
         this.stacked = false;
       }
     };
+
+    if (window.innerWidth < 800) {
+      this.stacked = true;
+    } else {
+      this.stacked = false;
+    }
   },
 
   methods: {

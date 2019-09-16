@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <Nav />
+    <Nav title="User Data from Spill Center 2019" />
     <UserData />
   </div>
 </template>
