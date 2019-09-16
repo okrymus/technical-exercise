@@ -1,7 +1,7 @@
 <template>
   <!-- display more user's information for each row -->
   <b-card border-variant="primary">
-    <p class="title">{{row['name']}}</p>
+    <h1>{{row['name']}}</h1>
     <div v-for="(value, key) in row" :key="key">
       <div v-if="key==='address'">
         <b-row class="mb-2">

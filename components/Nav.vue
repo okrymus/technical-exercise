@@ -9,7 +9,7 @@
         <NuxtLink class="navbar-item" to="/users">Users Page</NuxtLink>
       </div>
     </div>
-    <h1 style="  height: 90px; line-height: 90px; top:50%  ">{{title}}</h1>
+    <h1 style="  height: 90px; line-height: 90px; top:50%">{{title}}</h1>
   </nav>
 </template>
 
